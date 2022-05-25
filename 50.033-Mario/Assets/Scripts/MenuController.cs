@@ -1,13 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
+    public bool _isMenuOn = true;
+
+    private Button _button;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        _button = GetComponentInChildren<Button>();
+        _button.onClick.AddListener(StartButtonClicked);
     }
 
     // Update is called once per frame
@@ -23,6 +29,8 @@ public class MenuController : MonoBehaviour
 
     public void StartButtonClicked()
     {
+        _isMenuOn = false; // Turn off menu; Mario can move now
+
         foreach (Transform eachChild in transform)
         {
             if (eachChild.name != "Score")

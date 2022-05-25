@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.47058824}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -399,6 +399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dec54a23c7186e24bb2f6f3748b8c82e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isMenuOn: 1
 --- !u!1 &1260968607
 GameObject:
   m_ObjectHideFlags: 0
@@ -565,9 +566,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc2d36f6dc7850640a9ec60d799ef80c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyLocation: {fileID: 1811444758}
+  scoreText: {fileID: 1745745295}
+  menuController: {fileID: 0}
+  _marioSprite: {fileID: 0}
   speed: 70
-  maxSpeed: 10
-  upSpeed: 10
+  maxSpeed: 15
+  upSpeed: 40
+  downSpeed: 1.4
+  isDead: 0
 --- !u!50 &1283797328
 Rigidbody2D:
   serializedVersion: 4
@@ -730,8 +737,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -376, y: 258}
-  m_SizeDelta: {x: 250, y: 40}
+  m_AnchoredPosition: {x: -347.81995, y: 258}
+  m_SizeDelta: {x: 306.36, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1745745295
 MonoBehaviour:
@@ -766,7 +773,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Score: 0'
+  m_Text: 'Score: 000'
 --- !u!222 &1745745296
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -775,6 +782,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1745745293}
   m_CullTransparentMesh: 1
+--- !u!4 &1811444758 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7154110655393854781, guid: 3bdf9fced4dbb674895d6c32978e9bfe, type: 3}
+  m_PrefabInstance: {fileID: 3616599891540696190}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1852992679
 GameObject:
   m_ObjectHideFlags: 0
@@ -836,10 +848,10 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.990566, g: 0.3224012, b: 0.3224012, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_NormalColor: {r: 0.7169812, g: 0.091313645, b: 0.091313645, a: 1}
+    m_HighlightedColor: {r: 0.8207547, g: 0.112273075, b: 0.112273075, a: 1}
     m_PressedColor: {r: 0.9433962, g: 0.12904951, b: 0.12904951, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.9058824, g: 0.1254902, b: 0.1254902, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
