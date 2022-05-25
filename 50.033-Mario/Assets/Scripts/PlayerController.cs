@@ -14,16 +14,15 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 10;
     public float upSpeed;
     public float downSpeed;
-    public bool isDead = false;
-
 
     private Rigidbody2D _marioBody;
     private int _score = 0;
-    private float _deathTimer = 3.0f;
     private string _resetMain = "Main";
     private bool _onGroundState = true;
     private bool _faceRightState = true;
     private bool _countScoreState = false;
+    private bool _isDead = false;
+
 
     // Start is called before the first frame update
     void  Start()
@@ -67,23 +66,9 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            // If Mario is dead, reset the scene
-            if (isDead)
+            if (_isDead)
             {
-                if (_deathTimer > 0f)
-                {
-                    // Simple death animation of flipping Mario's sprite 4 times
-                    for (int i = 0; i < 4; i++)
-                    {
-                        _marioSprite.flipX = true;
-                    }
-                    _deathTimer -= Time.deltaTime;
-                }
-
-                if (_deathTimer == 0f)
-                {
-                    SceneManager.LoadScene(_resetMain);
-                }
+                SceneManager.LoadScene(_resetMain);
             }
         }
     }
@@ -136,24 +121,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Collided with Gomba!");
-            isDead = true;
+            _isDead = true;
         }
     }
-
-    // void ResetScene()
-    // {
-    //     while (_isDead && _deathTimer != 0.0f)
-    //     {
-    //         _marioSprite.flipX = true;
-    //         _deathTimer--;
-    //         Debug.Log("Death Timer left: " + _deathTimer);
-    //     }
-        
-    //     if (_deathTimer == 0.0f)
-    //     {
-    //         Debug.Log("Death Timer left: " + _deathTimer);
-    //         Debug.Log("Reloading Scene");
-    //         SceneManager.LoadScene("Main");
-    //     }
-    // }
 }

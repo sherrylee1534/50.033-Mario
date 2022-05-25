@@ -482,7 +482,7 @@ GameObject:
   - component: {fileID: 1283797329}
   m_Layer: 0
   m_Name: Mario
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -574,7 +574,6 @@ MonoBehaviour:
   maxSpeed: 15
   upSpeed: 40
   downSpeed: 1.4
-  isDead: 0
 --- !u!50 &1283797328
 Rigidbody2D:
   serializedVersion: 4

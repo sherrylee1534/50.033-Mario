@@ -39,11 +39,11 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-  void ComputeVelocity(){
-      _velocity = new Vector2((_moveRight)*_maxOffset / _enemyPatroltime, 0);
-  }
+    void ComputeVelocity(){
+        _velocity = new Vector2((_moveRight)*_maxOffset / _enemyPatroltime, 0);
+    }
 
-  void MoveGomba(){
-      enemyBody.MovePosition(enemyBody.position + _velocity * Time.fixedDeltaTime);
-  }
+    void MoveGomba(){
+        enemyBody.MovePosition(enemyBody.position + _velocity * Time.fixedDeltaTime);
+    }
 }
