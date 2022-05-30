@@ -27,7 +27,7 @@ public class EnemyController : MonoBehaviour
     {
         if (Mathf.Abs(enemyBody.position.x - _originalX) < _maxOffset)
         {   // Move gomba
-            MoveGomba();
+            //MoveGomba();
         }
 
         else

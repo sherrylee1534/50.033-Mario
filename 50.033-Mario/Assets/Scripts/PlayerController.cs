@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float downSpeed;
 
     private Rigidbody2D _marioBody;
+    private Animator _marioAnimator;
     private int _score = 0;
     private string _resetMain = "Main";
     private bool _onGroundState = true;
@@ -33,6 +34,8 @@ public class PlayerController : MonoBehaviour
         _marioSprite = GetComponent<SpriteRenderer>();
 
         menuController = GameObject.Find("UI").GetComponent<MenuController>();
+
+        _marioAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -44,15 +47,28 @@ public class PlayerController : MonoBehaviour
         }
 
         else {
+            _marioAnimator.SetFloat("xSpeed", Mathf.Abs(_marioBody.velocity.x));
+            _marioAnimator.SetBool("onGround", _onGroundState);
+
             // Toggle state of direction which Mario is facing
             if (Input.GetKeyDown("a") && _faceRightState){
                 _faceRightState = false;
                 _marioSprite.flipX = true;
+
+                if (Mathf.Abs(_marioBody.velocity.x) >  1.0)
+                {
+	                _marioAnimator.SetTrigger("onSkid");
+                }
             }
 
             if (Input.GetKeyDown("d") && !_faceRightState){
                 _faceRightState = true;
                 _marioSprite.flipX = false;
+
+                if (Mathf.Abs(_marioBody.velocity.x) >  1.0)
+                {
+	                _marioAnimator.SetTrigger("onSkid");
+                }
             }
 
             // When jumping, and Gomba is near Mario and we haven't registered our score
