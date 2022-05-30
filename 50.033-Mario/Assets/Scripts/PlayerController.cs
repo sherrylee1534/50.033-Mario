@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private int _score = 0;
     private string _resetMain = "Main";
     private bool _onGroundState = true;
+    private bool _onObstacleState = false;
     private bool _faceRightState = true;
     private bool _countScoreState = false;
     private bool _isDead = false;
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
         else {
             _marioAnimator.SetFloat("xSpeed", Mathf.Abs(_marioBody.velocity.x));
             _marioAnimator.SetBool("onGround", _onGroundState);
+            _marioAnimator.SetBool("onObstacle", _onObstacleState);
 
             // Toggle state of direction which Mario is facing
             if (Input.GetKeyDown("a") && _faceRightState){
@@ -95,21 +97,10 @@ public class PlayerController : MonoBehaviour
     // FixedUpdate may be called once per frame. See documentation for details.
     void FixedUpdate()
     {
-        // Dynamic Rigidbody
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        if (Mathf.Abs(moveHorizontal) > 0){
-            Vector2 movement = new Vector2(moveHorizontal, 0);
-            if (_marioBody.velocity.magnitude < maxSpeed) {
-                _marioBody.AddForce(movement * speed);
-            }
-        }
+        MarioMovement();
+        //Debug.Log("_onGroundState: " + _onGroundState + "; _onObstacleState: " + _onObstacleState);
 
-        if (Input.GetKeyUp("a") || Input.GetKeyUp("d")){
-            // Stop
-            _marioBody.velocity = Vector2.zero;
-        }
-
-        // Jumping
+        // Jumping on Ground
         if (Input.GetKeyDown("space") && _onGroundState)
         {
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
@@ -117,21 +108,43 @@ public class PlayerController : MonoBehaviour
             _countScoreState = true; // Check if Gomba is underneath when Mario is jumping
         }
 
-        // Falling
+        // Jumping on Obstacle
+        if (Input.GetKeyDown("space") && _onObstacleState)
+        {
+            _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
+            _onObstacleState = false;
+            _countScoreState = true; // Check if Gomba is underneath when Mario is jumping
+        }
+
+        // Falling in air
         if (!_onGroundState)
         {
             _marioBody.AddForce(Vector2.down * downSpeed, ForceMode2D.Impulse);
         }
+
+        // Mario is on the obstacle
+        if (!_onGroundState && _onObstacleState)
+        {
+            MarioMovement();
+        }
     }
 
-    // Called when Mario hits the floor
     void OnCollisionEnter2D(Collision2D col)
     {
+        // Called when Mario hits the ground
         if (col.gameObject.CompareTag("Ground"))
         {
             _onGroundState = true; // Back on ground
+            _onObstacleState = false;
             _countScoreState = false; // Reset _countScoreState
             scoreText.text = "Score: " + _score.ToString();
+        }
+
+        // Called when Mario hits the obstacle
+        if (col.gameObject.CompareTag("Obstacle"))
+        {
+            _onGroundState = false;
+            _onObstacleState = true; // Back on obstacle
         }
     }
 
@@ -147,5 +160,26 @@ public class PlayerController : MonoBehaviour
     void PlayJumpSound()
     {
         _marioAudio.PlayOneShot(_marioAudio.clip);
+    }
+
+    void MarioMovement()
+    {
+        // Dynamic Rigidbody
+        float moveHorizontal = Input.GetAxis("Horizontal");
+
+        if (Mathf.Abs(moveHorizontal) > 0)
+        {
+            Vector2 movement = new Vector2(moveHorizontal, 0);
+            if (_marioBody.velocity.magnitude < maxSpeed)
+            {
+                _marioBody.AddForce(movement * speed);
+            }
+        }
+
+        if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
+        {
+            // Stop
+            _marioBody.velocity = Vector2.zero;
+        }
     }
 }
