@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _marioBody;
     private Animator _marioAnimator;
+    private AudioSource _marioAudio;
     private int _score = 0;
     private string _resetMain = "Main";
     private bool _onGroundState = true;
@@ -36,6 +37,8 @@ public class PlayerController : MonoBehaviour
         menuController = GameObject.Find("UI").GetComponent<MenuController>();
 
         _marioAnimator = GetComponent<Animator>();
+
+        _marioAudio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -139,5 +142,10 @@ public class PlayerController : MonoBehaviour
             Debug.Log("Collided with Gomba!");
             _isDead = true;
         }
+    }
+
+    void PlayJumpSound()
+    {
+        _marioAudio.PlayOneShot(_marioAudio.clip);
     }
 }
