@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         else {
             _marioAnimator.SetFloat("xSpeed", Mathf.Abs(_marioBody.velocity.x));
             _marioAnimator.SetBool("onGround", _onGroundState);
-            _marioAnimator.SetBool("onObstacle", _onObstacleState);
+            //_marioAnimator.SetBool("onObstacle", _onObstacleState);
 
             // Toggle state of direction which Mario is facing
             if (Input.GetKeyDown("a") && _faceRightState){
@@ -98,22 +98,22 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         MarioMovement();
-        //Debug.Log("_onGroundState: " + _onGroundState + "; _onObstacleState: " + _onObstacleState);
+        Debug.Log("_onGroundState: " + _onGroundState + "; _onObstacleState: " + _onObstacleState);
 
-        // Jumping on Ground
+        // Jumping on ground
         if (Input.GetKeyDown("space") && _onGroundState)
         {
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
             _onGroundState = false;
+
             _countScoreState = true; // Check if Gomba is underneath when Mario is jumping
         }
 
-        // Jumping on Obstacle
+        // Jumping on obstacle
         if (Input.GetKeyDown("space") && _onObstacleState)
         {
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
-            _onObstacleState = false;
-            _countScoreState = true; // Check if Gomba is underneath when Mario is jumping
+            _onGroundState = false;
         }
 
         // Falling in air
@@ -121,48 +121,9 @@ public class PlayerController : MonoBehaviour
         {
             _marioBody.AddForce(Vector2.down * downSpeed, ForceMode2D.Impulse);
         }
-
-        // Mario is on the obstacle
-        if (!_onGroundState && _onObstacleState)
-        {
-            MarioMovement();
-        }
     }
 
-    void OnCollisionEnter2D(Collision2D col)
-    {
-        // Called when Mario hits the ground
-        if (col.gameObject.CompareTag("Ground"))
-        {
-            _onGroundState = true; // Back on ground
-            _onObstacleState = false;
-            _countScoreState = false; // Reset _countScoreState
-            scoreText.text = "Score: " + _score.ToString();
-        }
-
-        // Called when Mario hits the obstacle
-        if (col.gameObject.CompareTag("Obstacle"))
-        {
-            _onGroundState = false;
-            _onObstacleState = true; // Back on obstacle
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Collided with Gomba!");
-            _isDead = true;
-        }
-    }
-
-    void PlayJumpSound()
-    {
-        _marioAudio.PlayOneShot(_marioAudio.clip);
-    }
-
-    void MarioMovement()
+        void MarioMovement()
     {
         // Dynamic Rigidbody
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -181,5 +142,47 @@ public class PlayerController : MonoBehaviour
             // Stop
             _marioBody.velocity = Vector2.zero;
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        // Called when Mario hits the ground
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            Debug.Log("Colliding with: " + col.gameObject.name);
+            _onGroundState = true; // Back on ground
+
+            _countScoreState = false; // Reset _countScoreState
+            scoreText.text = "Score: " + _score.ToString();
+
+        }
+
+        // Called when Mario hits the obstacle
+        if (col.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Colliding with: " + col.gameObject.name);
+            _onGroundState = true; // Back on "ground" -> obstacle
+        }
+    }
+
+    // For when Mario steps off the edges and he starts defying the laws of physics and falls very slowly
+    void OnCollisionExit2D(Collision2D col)
+    {
+        _onGroundState = false;
+        _onObstacleState = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Collided with Gomba!");
+            _isDead = true;
+        }
+    }
+
+    void PlayJumpSound()
+    {
+        _marioAudio.PlayOneShot(_marioAudio.clip);
     }
 }
