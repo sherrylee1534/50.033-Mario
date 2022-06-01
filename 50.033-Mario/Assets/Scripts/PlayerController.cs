@@ -146,22 +146,13 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        _onGroundState = true;
+
         // Called when Mario hits the ground
         if (col.gameObject.CompareTag("Ground"))
         {
-            //Debug.Log("Colliding with: " + col.gameObject.name);
-            _onGroundState = true; // Back on ground
-
             _countScoreState = false; // Reset _countScoreState
             scoreText.text = "Score: " + _score.ToString();
-
-        }
-
-        // Called when Mario hits the obstacle
-        if (col.gameObject.CompareTag("Obstacle"))
-        {
-            //Debug.Log("Colliding with: " + col.gameObject.name);
-            _onGroundState = true; // Back on "ground" -> obstacle
         }
     }
 
@@ -176,7 +167,6 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            //Debug.Log("Collided with Gomba!");
             _isDead = true;
         }
     }

@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    private Vector2 _velocity;
+    private Rigidbody2D _enemyBody;
     private float _originalX;
     private float _maxOffset = 5.0f;
     private float _enemyPatroltime = 2.0f;
     private int _moveRight = -1;
-    private Vector2 _velocity;
-
-    private Rigidbody2D enemyBody;
 
     // Start is called before the first frame update
     void Start()
     {
-        enemyBody = GetComponent<Rigidbody2D>();
+        _enemyBody = GetComponent<Rigidbody2D>();
 
         // Get the starting position
         _originalX = transform.position.x;
@@ -25,7 +24,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mathf.Abs(enemyBody.position.x - _originalX) < _maxOffset)
+        if (Mathf.Abs(_enemyBody.position.x - _originalX) < _maxOffset)
         {   // Move gomba
             MoveGomba();
         }
@@ -44,6 +43,6 @@ public class EnemyController : MonoBehaviour
     }
 
     void MoveGomba(){
-        enemyBody.MovePosition(enemyBody.position + _velocity * Time.fixedDeltaTime);
+        _enemyBody.MovePosition(_enemyBody.position + _velocity * Time.fixedDeltaTime);
     }
 }

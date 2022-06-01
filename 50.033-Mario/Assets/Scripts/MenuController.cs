@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    public bool _isMenuOn = true;
-
     private Button _button;
+
+    public bool _isMenuOn = true;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +35,8 @@ public class MenuController : MonoBehaviour
         {
             if (eachChild.name != "Score")
             {
-                Debug.Log("Child found. Name: " + eachChild.name);
+                //Debug.Log("Child found. Name: " + eachChild.name);
+                
                 // Disable them
                 eachChild.gameObject.SetActive(false);
                 Time.timeScale = 1.0f;
