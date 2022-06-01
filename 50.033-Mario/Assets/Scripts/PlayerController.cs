@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         MarioMovement();
-        Debug.Log("_onGroundState: " + _onGroundState + "; _onObstacleState: " + _onObstacleState);
+        //Debug.Log("_onGroundState: " + _onGroundState + "; _onObstacleState: " + _onObstacleState);
 
         // Jumping on ground
         if (Input.GetKeyDown("space") && _onGroundState)
@@ -149,7 +149,7 @@ public class PlayerController : MonoBehaviour
         // Called when Mario hits the ground
         if (col.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("Colliding with: " + col.gameObject.name);
+            //Debug.Log("Colliding with: " + col.gameObject.name);
             _onGroundState = true; // Back on ground
 
             _countScoreState = false; // Reset _countScoreState
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         // Called when Mario hits the obstacle
         if (col.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("Colliding with: " + col.gameObject.name);
+            //Debug.Log("Colliding with: " + col.gameObject.name);
             _onGroundState = true; // Back on "ground" -> obstacle
         }
     }
@@ -176,7 +176,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Enemy"))
         {
-            Debug.Log("Collided with Gomba!");
+            //Debug.Log("Collided with Gomba!");
             _isDead = true;
         }
     }
