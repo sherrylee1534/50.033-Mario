@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Text scoreText;
     public MenuController menuController;
     public SpriteRenderer _marioSprite;
+    public ParticleSystem dustCloud;
     public float speed;
     public float maxSpeed = 10;
     public float upSpeed;
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     private bool _faceRightState = true;
     private bool _countScoreState = false;
     private bool _isDead = false;
+    private bool _isInAir = false;
 
 
     // Start is called before the first frame update
@@ -40,6 +42,8 @@ public class PlayerController : MonoBehaviour
         _marioAnimator = GetComponent<Animator>();
 
         _marioAudio = GetComponent<AudioSource>();
+
+        dustCloud = GameObject.Find("DustCloud").GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -120,6 +124,8 @@ public class PlayerController : MonoBehaviour
         if (!_onGroundState)
         {
             _marioBody.AddForce(Vector2.down * downSpeed, ForceMode2D.Impulse);
+
+            _isInAir = true;
         }
     }
 
@@ -154,6 +160,13 @@ public class PlayerController : MonoBehaviour
             _countScoreState = false; // Reset _countScoreState
             scoreText.text = "Score: " + _score.ToString();
         }
+
+        if (_isInAir)
+        {
+            dustCloud.Play(); // Play DustCloud Particle System animation
+        }
+
+        _isInAir = false; // Reset _isInAir
     }
 
     // For when Mario steps off the edges and he starts defying the laws of physics and falls very slowly
@@ -161,6 +174,7 @@ public class PlayerController : MonoBehaviour
     {
         _onGroundState = false;
         _onObstacleState = false;
+        _isInAir = true;
     }
 
     void OnTriggerEnter2D(Collider2D other)
