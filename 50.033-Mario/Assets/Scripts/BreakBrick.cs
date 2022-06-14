@@ -6,7 +6,7 @@ public class BreakBrick : MonoBehaviour
 {
     public GameObject debris;
 
-    private bool _broken;
+    private bool _broken = false;
 
     // Start is called before the first frame update
     void Start()
