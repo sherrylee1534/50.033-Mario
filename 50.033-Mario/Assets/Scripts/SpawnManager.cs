@@ -17,7 +17,7 @@ public class SpawnManager : MonoBehaviour
         // }
 
         // Spawn 3 greenTurtleEnemy
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 2; i++)
         {
             spawnFromPooler(ObjectType.greenTurtleEnemy);
         }

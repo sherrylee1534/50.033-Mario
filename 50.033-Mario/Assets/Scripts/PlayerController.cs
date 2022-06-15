@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour
             // Do nothing
         }
 
-        else {
+        else
+        {
             _marioAnimator.SetFloat("xSpeed", Mathf.Abs(_marioBody.velocity.x));
             _marioAnimator.SetBool("onGround", _onGroundState);
             //_marioAnimator.SetBool("onObstacle", _onObstacleState);
@@ -77,6 +78,16 @@ public class PlayerController : MonoBehaviour
                 {
 	                _marioAnimator.SetTrigger("onSkid");
                 }
+            }
+
+            if (Input.GetKeyDown("z"))
+            {
+                CentralManager.centralManagerInstance.consumePowerup(KeyCode.Z, this.gameObject);
+            }
+
+            if (Input.GetKeyDown("x"))
+            {
+                CentralManager.centralManagerInstance.consumePowerup(KeyCode.X, this.gameObject);
             }
 
             if (_isDead)
@@ -155,7 +166,16 @@ public class PlayerController : MonoBehaviour
     // For when Mario steps off the edges and he starts defying the laws of physics and falls very slowly
     void OnCollisionExit2D(Collision2D col)
     {
-        _onGroundState = false;
+        if (col.gameObject.tag == "Mushroom")
+        {
+            _onGroundState = true;
+        }
+        
+        else
+        {
+            _onGroundState = false;
+        }
+
         _onObstacleState = false;
         _isInAir = true;
     }
@@ -173,10 +193,9 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator PlayerDeathTimer()
     {
-        yield return new WaitForSeconds(0.2f);
         _marioBody.isKinematic = true;
 	    _marioBody.gravityScale = 0;
-        yield return new WaitForSeconds(_deathTimer - 0.2f);
+        yield return new WaitForSeconds(_deathTimer);
         SceneManager.LoadScene(_resetMain);
     }
 }

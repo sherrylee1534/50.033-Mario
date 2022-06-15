@@ -36,16 +36,4 @@ public class GameConstants : ScriptableObject
     
     // For testing
     public int testValue;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -43,12 +43,6 @@ public class ConsumableMushroomController : MonoBehaviour
         {
             MoveConsumableMushroom(Mathf.Sign(_randomFloat));
         }
-
-        if (_collected)
-        {
-            _mushroomAnimator.SetTrigger("collected");
-            StartCoroutine(DestroyMushroom());
-        }
     }
 
     void MoveConsumableMushroom(float direction)
@@ -81,6 +75,9 @@ public class ConsumableMushroomController : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             _collected = true;
+            _speed = 0; // Stop mushroom movement
+            gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f); // Make mushroom bigger
+            StartCoroutine(DestroyMushroom());
         }
     }
 
@@ -92,8 +89,7 @@ public class ConsumableMushroomController : MonoBehaviour
 
     IEnumerator DestroyMushroom()
     {
-        //_speed = 0; // Stop mushroom movement
-        yield return new WaitForSeconds(0.25f);
+        yield return new WaitForSeconds(0.5f);
         Destroy(gameObject);
     }
 }
