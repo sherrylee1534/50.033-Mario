@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConsummableMushroomController : MonoBehaviour
+public class ConsumableMushroomController : MonoBehaviour
 {
-    private Rigidbody2D _consummableMushroomBody;
+    private Rigidbody2D _consumableMushroomBody;
     private float _speed = 5.0f;
     private float _randomFloat;
     private float _originalX;
@@ -12,7 +12,7 @@ public class ConsummableMushroomController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _consummableMushroomBody = GetComponent<Rigidbody2D>();
+        _consumableMushroomBody = GetComponent<Rigidbody2D>();
 
         _originalX = transform.position.x; // Get the starting position
         _randomFloat = Random.Range(-1.0f, 1.0f); // Get a random Integer to decide direction
@@ -22,7 +22,7 @@ public class ConsummableMushroomController : MonoBehaviour
         //_randomInt = Random.Range(-1.0f, 0.0f); // Always spawns left
         //Debug.Log("Random Int: " + _randomInt);
 
-        _consummableMushroomBody.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+        _consumableMushroomBody.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
     }
 
     // Update is called once per frame
@@ -31,19 +31,19 @@ public class ConsummableMushroomController : MonoBehaviour
         // Move right
         if (_randomFloat >= 0 && _randomFloat <= 1)
         {
-            MoveConsummableMushroom(Mathf.Sign(_randomFloat));
+            MoveConsumableMushroom(Mathf.Sign(_randomFloat));
         }
 
         // Move left
         else
         {
-            MoveConsummableMushroom(Mathf.Sign(_randomFloat));
+            MoveConsumableMushroom(Mathf.Sign(_randomFloat));
         }
     }
 
-    void MoveConsummableMushroom(float direction)
+    void MoveConsumableMushroom(float direction)
     {
-        _consummableMushroomBody.velocity = new Vector2(direction * _speed, _consummableMushroomBody.velocity.y);
+        _consumableMushroomBody.velocity = new Vector2(direction * _speed, _consumableMushroomBody.velocity.y);
     }
 
     void OnCollisionEnter2D(Collision2D col)
@@ -57,13 +57,13 @@ public class ConsummableMushroomController : MonoBehaviour
             // Move right
             if (_randomFloat >= 0 && _randomFloat <= 1)
             {
-                MoveConsummableMushroom(Mathf.Sign(_randomFloat));
+                MoveConsumableMushroom(Mathf.Sign(_randomFloat));
             }
 
             // Move left
             else
             {
-                MoveConsummableMushroom(Mathf.Sign(_randomFloat));
+                MoveConsumableMushroom(Mathf.Sign(_randomFloat));
             }
         }
 

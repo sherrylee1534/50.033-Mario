@@ -25,12 +25,13 @@ public class BreakBrick : MonoBehaviour
         if (col.gameObject.CompareTag("Player") && !_broken)
         {
             _broken = true;
+            AudioManager.instance.BreakBrickSFX();
 
             // Assume we have 5 debris per box
             for (int x = 0; x < 5; x++)
             {
                 Instantiate(debris, transform.position, Quaternion.identity);
-                Debug.Log(x);
+                // Debug.Log(x);
             }
 
             gameObject.transform.parent.GetComponent<SpriteRenderer>().enabled = false;

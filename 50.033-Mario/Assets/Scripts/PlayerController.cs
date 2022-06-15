@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _marioBody;
     private Animator _marioAnimator;
-    private AudioSource _marioAudio;
     private int _score = 0;
     private string _resetMain = "Main";
     private bool _onGroundState = true;
@@ -30,7 +29,7 @@ public class PlayerController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void  Start()
+    void Start()
     {
         // Set to be 30 FPS
         Application.targetFrameRate =  30;
@@ -40,8 +39,6 @@ public class PlayerController : MonoBehaviour
         menuController = GameObject.Find("UI").GetComponent<MenuController>();
 
         _marioAnimator = GetComponent<Animator>();
-
-        _marioAudio = GetComponent<AudioSource>();
 
         dustCloud = GameObject.Find("DustCloud").GetComponentInChildren<ParticleSystem>();
     }
@@ -80,10 +77,15 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            // When jumping, and Gomba is near Mario and we haven't registered our score
+            // When jumping, and Goomba is near Mario and we haven't registered our score
             if (!_onGroundState && _countScoreState)
             {
-                if (Mathf.Abs(transform.position.x - enemyLocation.position.x) < 0.5f)
+                if (enemyLocation == null)
+                {
+                    // Debug.Log("No enemy variable assigned");
+                }
+
+                else if (Mathf.Abs(transform.position.x - enemyLocation.position.x) < 0.5f)
                 {
                     _countScoreState = false;
                     _score++;
@@ -110,7 +112,9 @@ public class PlayerController : MonoBehaviour
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
             _onGroundState = false;
 
-            _countScoreState = true; // Check if Gomba is underneath when Mario is jumping
+            _countScoreState = true; // Check if Goomba is underneath when Mario is jumping
+
+            AudioManager.instance.PlayerJumpSFX();
         }
 
         // Jumping on obstacle
@@ -118,6 +122,8 @@ public class PlayerController : MonoBehaviour
         {
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
             _onGroundState = false;
+
+            AudioManager.instance.PlayerJumpSFX();
         }
 
         // Falling in air
@@ -183,10 +189,5 @@ public class PlayerController : MonoBehaviour
         {
             _isDead = true;
         }
-    }
-
-    void PlayJumpSound()
-    {
-        _marioAudio.PlayOneShot(_marioAudio.clip);
     }
 }

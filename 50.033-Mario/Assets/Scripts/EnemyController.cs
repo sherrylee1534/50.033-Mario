@@ -25,8 +25,8 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         if (Mathf.Abs(_enemyBody.position.x - _originalX) < _maxOffset)
-        {   // Move gomba
-            MoveGomba();
+        {   // Move Goomba
+            MoveGoomba();
         }
 
         else
@@ -34,7 +34,7 @@ public class EnemyController : MonoBehaviour
             // Change direction
             _moveRight *= -1;
             ComputeVelocity();
-            MoveGomba();
+            MoveGoomba();
         }
     }
 
@@ -42,7 +42,7 @@ public class EnemyController : MonoBehaviour
         _velocity = new Vector2((_moveRight)*_maxOffset / _enemyPatroltime, 0);
     }
 
-    void MoveGomba(){
+    void MoveGoomba(){
         _enemyBody.MovePosition(_enemyBody.position + _velocity * Time.fixedDeltaTime);
     }
 }

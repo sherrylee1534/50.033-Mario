@@ -1,39 +1,44 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
-
 
 public class AudioManager : MonoBehaviour
 {
-    public BreakBrick breakBrickScript;
+    public static AudioManager instance;
+    [SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
+    [SerializeField] AudioSource themeSource;
+    [SerializeField] AudioSource playerJumpSource;
+    [SerializeField] AudioSource breakBrickSource;
 
-    private AudioMixer _MasterMixer;
-    private AudioMixerSnapshot _snapshot1;
-    private AudioMixerPlayable _breakBrick;
-
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        breakBrickScript = GetComponent<BreakBrick>();
+        if (instance == null)
+        {
+            instance = this;
 
-        _snapshot1 = _MasterMixer.FindSnapshot("GameAudio");
-        Snapshot1(); // Play audio on start
+            DontDestroyOnLoad(gameObject);
+        }
+
+        else
+        {
+            Destroy(gameObject); // So we don't have multiple AudioManagers
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ThemeSFX()
     {
-        
+        AudioClip clip = audioClips[0];
+        themeSource.Play();
     }
 
-    void Snapshot1()
+    public void PlayerJumpSFX()
     {
-        _snapshot1.TransitionTo(0.0f);
+        AudioClip clip = audioClips[1];
+        playerJumpSource.PlayOneShot(clip);
     }
 
-    void PlayBreakBrickSound()
+    public void BreakBrickSFX()
     {
-        
+        AudioClip clip = audioClips[2];
+        breakBrickSource.PlayOneShot(clip);
     }
 }
