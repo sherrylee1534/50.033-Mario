@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public Transform enemyLocation;
     public Text scoreText;
     public MenuController menuController;
-    public SpriteRenderer _marioSprite;
+    public SpriteRenderer marioSprite;
     public ParticleSystem dustCloud;
     public float speed;
     public float maxSpeed = 10;
@@ -18,12 +18,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D _marioBody;
     private Animator _marioAnimator;
-    private int _score = 0;
     private string _resetMain = "Main";
+    private float _deathTimer = 3.0f;
     private bool _onGroundState = true;
     private bool _onObstacleState = false;
     private bool _faceRightState = true;
-    private bool _countScoreState = false;
     private bool _isDead = false;
     private bool _isInAir = false;
 
@@ -34,21 +33,24 @@ public class PlayerController : MonoBehaviour
         // Set to be 30 FPS
         Application.targetFrameRate =  30;
         _marioBody = GetComponent<Rigidbody2D>();
-        _marioSprite = GetComponent<SpriteRenderer>();
+        marioSprite = GetComponent<SpriteRenderer>();
 
         menuController = GameObject.Find("UI").GetComponent<MenuController>();
 
         _marioAnimator = GetComponent<Animator>();
 
         dustCloud = GameObject.Find("DustCloud").GetComponentInChildren<ParticleSystem>();
+
+        GameManager.OnPlayerDeath += PlayerDiesSequence;
     }
 
     // Update is called once per frame
     void Update()
     {
         // If Menu is still open, no movement is allowed
-        if (menuController._isMenuOn) {
-            // Do nothing            
+        if (menuController._isMenuOn) 
+        {
+            // Do nothing
         }
 
         else {
@@ -59,7 +61,7 @@ public class PlayerController : MonoBehaviour
             // Toggle state of direction which Mario is facing
             if (Input.GetKeyDown("a") && _faceRightState){
                 _faceRightState = false;
-                _marioSprite.flipX = true;
+                marioSprite.flipX = true;
 
                 if (Mathf.Abs(_marioBody.velocity.x) >  1.0)
                 {
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown("d") && !_faceRightState){
                 _faceRightState = true;
-                _marioSprite.flipX = false;
+                marioSprite.flipX = false;
 
                 if (Mathf.Abs(_marioBody.velocity.x) >  1.0)
                 {
@@ -77,25 +79,9 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            // When jumping, and Goomba is near Mario and we haven't registered our score
-            if (!_onGroundState && _countScoreState)
-            {
-                if (enemyLocation == null)
-                {
-                    // Debug.Log("No enemy variable assigned");
-                }
-
-                else if (Mathf.Abs(transform.position.x - enemyLocation.position.x) < 0.5f)
-                {
-                    _countScoreState = false;
-                    _score++;
-                    Debug.Log(_score);
-                }
-            }
-
             if (_isDead)
             {
-                SceneManager.LoadScene(_resetMain);
+                StartCoroutine(PlayerDeathTimer());
             }
         }
     }
@@ -111,8 +97,6 @@ public class PlayerController : MonoBehaviour
         {
             _marioBody.AddForce(Vector2.up * upSpeed, ForceMode2D.Impulse);
             _onGroundState = false;
-
-            _countScoreState = true; // Check if Goomba is underneath when Mario is jumping
 
             AudioManager.instance.PlayerJumpSFX();
         }
@@ -135,7 +119,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-        void MarioMovement()
+    void MarioMovement()
     {
         // Dynamic Rigidbody
         float moveHorizontal = Input.GetAxis("Horizontal");
@@ -160,13 +144,6 @@ public class PlayerController : MonoBehaviour
     {
         _onGroundState = true;
 
-        // Called when Mario hits the ground
-        if (col.gameObject.CompareTag("Ground"))
-        {
-            _countScoreState = false; // Reset _countScoreState
-            scoreText.text = "Score: " + _score.ToString();
-        }
-
         if (_isInAir)
         {
             dustCloud.Play(); // Play DustCloud Particle System animation
@@ -183,11 +160,23 @@ public class PlayerController : MonoBehaviour
         _isInAir = true;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void PlayerDiesSequence()
     {
-        if (other.gameObject.CompareTag("Enemy"))
-        {
-            _isDead = true;
-        }
+        // Mario dies
+        // Debug.Log("Mario dies");
+
+        // Mario gets yeeted when he dies
+        var yeetSpeed = 200f;
+        _marioBody.AddForce(Vector2.up * yeetSpeed, ForceMode2D.Impulse);
+        _isDead = true;
+    }
+
+    IEnumerator PlayerDeathTimer()
+    {
+        yield return new WaitForSeconds(0.2f);
+        _marioBody.isKinematic = true;
+	    _marioBody.gravityScale = 0;
+        yield return new WaitForSeconds(_deathTimer - 0.2f);
+        SceneManager.LoadScene(_resetMain);
     }
 }

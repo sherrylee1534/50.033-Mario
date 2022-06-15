@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class QuestionBoxController : MonoBehaviour
 {
-    public  Rigidbody2D rigidBody;
-    public  SpringJoint2D springJoint;
-    public  GameObject consummablePrefab; // The spawned mushroom prefab
-    public  SpriteRenderer spriteRenderer;
-    public  Sprite usedQuestionBox; // The sprite that indicates empty box instead of a question mark
+    public Rigidbody2D rigidBody;
+    public SpringJoint2D springJoint;
+    public List<GameObject> consummablePrefabs; // The spawned mushroom prefab
+    public SpriteRenderer spriteRenderer;
+    public Sprite usedQuestionBox; // The sprite that indicates empty box instead of a question mark
 
     private bool _hit =  false;
 
@@ -24,22 +24,24 @@ public class QuestionBoxController : MonoBehaviour
         
     }
 
-    void  OnCollisionEnter2D(Collision2D col)
+    void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.CompareTag("Player") &&  !_hit){
             _hit  =  true;
             // Ensure that we move this object sufficiently 
 		    rigidBody.AddForce(new Vector2(0, rigidBody.mass * 20), ForceMode2D.Impulse);
 
+            var rand = Random.Range(0, 2); // Get a random number to spawn a random mushroom
+
             // Spawn the mushroom prefab slightly above the box
-            Instantiate(consummablePrefab, new  Vector3(this.transform.position.x, this.transform.position.y  +  1.0f, this.transform.position.z), Quaternion.identity);
+            Instantiate(consummablePrefabs[rand], new Vector3(this.transform.position.x, this.transform.position.y  +  1.0f, this.transform.position.z), Quaternion.identity);
 
             // Begin check to disable object's spring and rigidbody
             StartCoroutine(DisableHittable());
         }
     }
 
-    bool  ObjectMovedAndStopped()
+    bool ObjectMovedAndStopped()
     {
 	    return Mathf.Abs(rigidBody.velocity.magnitude) < 0.01;
     }

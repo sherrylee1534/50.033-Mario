@@ -4,6 +4,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
+    
     [SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
     [SerializeField] AudioSource themeSource;
     [SerializeField] AudioSource playerJumpSource;

@@ -5,9 +5,11 @@ using UnityEngine;
 public class ConsumableMushroomController : MonoBehaviour
 {
     private Rigidbody2D _consumableMushroomBody;
+    private Animator _mushroomAnimator;
     private float _speed = 5.0f;
     private float _randomFloat;
     private float _originalX;
+    private bool _collected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,8 @@ public class ConsumableMushroomController : MonoBehaviour
         //Debug.Log("Random Int: " + _randomInt);
 
         _consumableMushroomBody.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+
+        _mushroomAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -38,6 +42,12 @@ public class ConsumableMushroomController : MonoBehaviour
         else
         {
             MoveConsumableMushroom(Mathf.Sign(_randomFloat));
+        }
+
+        if (_collected)
+        {
+            _mushroomAnimator.SetTrigger("collected");
+            StartCoroutine(DestroyMushroom());
         }
     }
 
@@ -70,13 +80,20 @@ public class ConsumableMushroomController : MonoBehaviour
         // Stop the mushroom movement when it hits Mario
         if (col.gameObject.CompareTag("Player"))
         {
-            _speed = 0;
+            _collected = true;
         }
     }
 
     // Mushroom disappears when no longer in camera view
-    void  OnBecameInvisible()
+    void OnBecameInvisible()
     {
 	    Destroy(gameObject);	
+    }
+
+    IEnumerator DestroyMushroom()
+    {
+        //_speed = 0; // Stop mushroom movement
+        yield return new WaitForSeconds(0.25f);
+        Destroy(gameObject);
     }
 }

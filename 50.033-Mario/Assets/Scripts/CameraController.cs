@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public  Transform player; // Mario's Transform
-    public  Transform endLimit; // GameObject that indicates end of map
+    public Transform player; // Mario's Transform
+    public Transform endLimit; // GameObject that indicates end of map
 
-    private  float _offset; // Initial x-offset between camera and Mario
-    private  float _startX; // Smallest x-coordinate of the Camera
-    private  float _endX; // Largest x-coordinate of the camera
-    private  float _viewportHalfWidth;
+    private float _offset; // Initial x-offset between camera and Mario
+    private float _startX; // Smallest x-coordinate of the Camera
+    private float _endX; // Largest x-coordinate of the camera
+    private float _viewportHalfWidth;
 
     // Start is called before the first frame update
-    void  Start()
+    void Start()
     {
         // Get coordinate of the bottomleft of the viewport
         // z doesn't matter since the camera is orthographic
@@ -26,7 +26,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void  Update()
+    void Update()
     {
         float desiredX = player.position.x + _offset;
 

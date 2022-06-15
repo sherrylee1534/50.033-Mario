@@ -165,7 +165,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 494732109681911375}
   springJoint: {fileID: 494732109681911369}
-  consummablePrefab: {fileID: 6776702094239087104, guid: 72da9084d877f2e48b54493dd8b0f9c2, type: 3}
+  consummablePrefabs:
+  - {fileID: 6776702094239087104, guid: 5d1f4cbe5f1502f4abcf65700124334e, type: 3}
+  - {fileID: 6776702094239087104, guid: b4013cc220d818645bafced027dbd38c, type: 3}
   spriteRenderer: {fileID: 494732109681911374}
   usedQuestionBox: {fileID: 21300050, guid: 855dc7396df3c4e49ac4d21234eac5e1, type: 3}
 --- !u!1 &494732110158376033

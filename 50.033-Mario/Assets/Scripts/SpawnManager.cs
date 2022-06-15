@@ -7,10 +7,19 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Spawn two goombaEnemy
-        for (int j = 0; j < 2; j++)
+        GameManager.OnIncreaseScore += SpawnNewEnemy;
+
+        // // Spawn 2 goombaEnemy
+        // for (int i = 0; i < 2; i++)
+        // {
+        //     spawnFromPooler(ObjectType.goombaEnemy);
+        //     spawnFromPooler(ObjectType.greenTurtleEnemy);
+        // }
+
+        // Spawn 3 greenTurtleEnemy
+        for (int i = 0; i < 3; i++)
         {
-            spawnFromPooler(ObjectType.goombaEnemy);
+            spawnFromPooler(ObjectType.greenTurtleEnemy);
         }
     }
 
@@ -34,6 +43,24 @@ public class SpawnManager : MonoBehaviour
         else
         {
             Debug.Log("Not enough items in the pool.");
+        }
+    }
+
+    public void SpawnNewEnemy()
+    {
+        var rand = Random.Range(0, 2);
+        
+        switch(rand)
+        {
+            case 0:
+                spawnFromPooler((ObjectType)0);
+                break;
+            case 1:
+                spawnFromPooler((ObjectType)1);
+                break;
+            default:
+                spawnFromPooler((ObjectType)0);
+                break;
         }
     }
 }
